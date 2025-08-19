@@ -1,6 +1,7 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoryModule } from './cases/categories/category.module';
+import { BrandModule } from './cases/brands/brand.module';
 
 @Module({
   imports: [
@@ -11,7 +12,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'postgres.onovtbavghhzcywjwacr',
       password: 'POSTGRES',
       database: 'postgres',
+      autoLoadEntities: true,
+      synchronize: true, //só da para utilizar como True em desenvolvimento, pq tudo vai sincronizar com banco
     }),
+    CategoryModule,
+    BrandModule,
   ],
 })
 export class AppModule {}
