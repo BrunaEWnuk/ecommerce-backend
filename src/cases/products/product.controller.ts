@@ -10,16 +10,27 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
+import { CategoryService } from '../categories/category.service';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly service: ProductService) {}
+  constructor(
+    private readonly service: ProductService,
+    private readonly categoryService: CategoryService,
+  ) {}
 
   @Get()
-  findAll(): Promise<Product[]> {
+  async findAll(
+    @Query('categoryId', ParseUUIDPipe) categoryId?: string,
+  ): Promise<Product[]> {
+    if (categoryId) {
+      const category = await this.categoryService.findById(categoryId);
+      return this.service.findAll(category ?? undefined);
+    }
     return this.service.findAll();
   }
 
@@ -38,7 +49,7 @@ export class ProductController {
     return this.service.save(product);
   }
 
-  @Put(':id') // put -> substitui o objeto inteiro
+  @Put(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() product: Product,
@@ -58,7 +69,7 @@ export class ProductController {
     const found = await this.service.findById(id);
 
     if (!found) {
-      throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND);
     }
     return this.service.remove(id);
   }
