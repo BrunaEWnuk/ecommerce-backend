@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Customer } from '../customers/customer.entity';
-import { OrderItem } from 
+import { OrderItem } from './order-item.entity';
 
 enum OrderStatus {
   NEW = 'NEW',
@@ -31,12 +31,12 @@ export class Order {
   shipping: number;
 
   @Column('enum', { enum: OrderStatus, default: OrderStatus.NEW })
-  status: string;
+  status: OrderStatus;
 
   @Column('decimal', { nullable: true, precision: 10, scale: 2 })
   total: number;
 
-  @OneToMany(() => OrderItem, (item) => item.order, {
+  @OneToMany(() => OrderItem, (item: OrderItem) => item.order, {
     eager: true,
     cascade: true,
   })
