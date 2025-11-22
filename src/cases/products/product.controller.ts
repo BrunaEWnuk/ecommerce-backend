@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -15,6 +16,7 @@ import {
 import { Product } from './product.entity';
 import { ProductService } from './product.service';
 import { CategoryService } from '../categories/category.service';
+import { validate } from 'uuid';
 
 @Controller('products')
 export class ProductController {
@@ -24,13 +26,16 @@ export class ProductController {
   ) {}
 
   @Get()
-  async findAll(
-    @Query('categoryId', ParseUUIDPipe) categoryId?: string,
-  ): Promise<Product[]> {
+  async findAll(@Query('categoryId') categoryId?: string): Promise<Product[]> {
     if (categoryId) {
+      if (!validate(categoryId)) {
+        throw new BadRequestException('Invalid categoryId');
+      }
+
       const category = await this.categoryService.findById(categoryId);
       return this.service.findAll(category ?? undefined);
     }
+
     return this.service.findAll();
   }
 
