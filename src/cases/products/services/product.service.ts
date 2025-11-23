@@ -1,8 +1,8 @@
 import { Repository } from 'typeorm';
-import { Product } from './product.entity';
+import { Product } from '../entities/product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Category } from '../categories/category.entity';
+import { Category } from '../../categories/category.entity';
 
 @Injectable()
 export class ProductService {
@@ -12,19 +12,21 @@ export class ProductService {
   ) {}
 
   findAll(category?: Category): Promise<Product[]> {
-    if (!category) {
-      return this.repository.find();
-    } else {
-      return this.repository.find({
-        where: { category },
-      });
+    const options: any = {
+      relations: ['category', 'photos'],
+    };
+
+    if (category) {
+      options.where = { category };
     }
+
+    return this.repository.find(options);
   }
 
   findById(id: string): Promise<Product | null> {
     return this.repository.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['category', 'brand', 'photos'],
     });
   }
 

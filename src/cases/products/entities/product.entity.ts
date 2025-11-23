@@ -1,6 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Brand } from '../brands/brand.entity';
-import { Category } from '../categories/category.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Brand } from '../../brands/brand.entity';
+import { Category } from '../../categories/category.entity';
+import { ProductPhoto } from './product-photo-entity';
 
 @Entity('product')
 export class Product {
@@ -20,8 +27,11 @@ export class Product {
   active: boolean;
 
   @ManyToOne(() => Category, { eager: false, nullable: false })
-  category: Category; // igual ao pai
+  category: Category;
 
   @ManyToOne(() => Brand, { eager: false, nullable: true })
   brand: Brand;
+
+  @OneToMany(() => ProductPhoto, (photo) => photo.product)
+  photos: ProductPhoto[];
 }

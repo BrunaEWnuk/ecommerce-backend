@@ -13,9 +13,9 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { Product } from './product.entity';
-import { ProductService } from './product.service';
-import { CategoryService } from '../categories/category.service';
+import { Product } from '../entities/product.entity';
+import { ProductService } from '../services/product.service';
+import { CategoryService } from '../../categories/category.service';
 import { validate } from 'uuid';
 
 @Controller('products')
