@@ -9,7 +9,6 @@ import { Brand } from '../../brands/brand.entity';
 import { Category } from '../../categories/category.entity';
 import { ProductPhoto } from './product-photo-entity';
 import { Favorite } from 'src/cases/favorites/entities/favorite.entity';
-import { Review } from 'src/cases/reviews/entities/review.entity';
 
 @Entity('product')
 export class Product {
@@ -39,7 +38,4 @@ export class Product {
 
   @OneToMany(() => Favorite, (favorite) => favorite.product)
   favorite: Favorite[];
-
-  @OneToMany(() => Review, (review) => review.product)
-  review: Review[];
 }

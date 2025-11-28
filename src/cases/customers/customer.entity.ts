@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { City } from '../cities/entities/city.entity';
 import { Favorite } from '../favorites/entities/favorite.entity';
-import { Review } from '../reviews/entities/review.entity';
 
 @Entity('customer')
 export class Customer {
@@ -28,7 +27,4 @@ export class Customer {
 
   @OneToMany(() => Favorite, (favorite) => favorite.customer)
   favorite: Favorite[];
-
-  @OneToMany(() => Review, (review) => review.customer)
-  review: Review[];
 }
